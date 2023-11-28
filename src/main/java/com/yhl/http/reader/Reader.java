@@ -20,7 +20,7 @@ import java.nio.file.Paths;
  */
 public class Reader {
   public static final String INDEX_EXT = ".idx";
-  public static final String BINARY_EXE = ".fepk";
+  public static final String BINARY_EXE = ".dat";
   public static final String TYPE_IMAGE = "image";
   public static final String TYPE_LABEL = "label";
   public static final String TYPE_DEM = "dem";
