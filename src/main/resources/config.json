@@ -1,0 +1,7 @@
+{
+  "indexFile": "D:\\FE\\data\\fepk\\world.fepk",
+  "dataPath": [ "D:\\FE\\data\\fepk", "D:\\FE\\data\\fepk1", "D:\\FE\\data\\fepk2" ],
+  "httpIP": "127.0.0.1",
+  "httpPort": 11111,
+  "contentType": "image/jpeg"
+}

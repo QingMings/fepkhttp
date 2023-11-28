@@ -1,0 +1,17 @@
+{
+  "image": {
+    "indexFile": "D:\\FE\\data\\fepk\\world.fepk",
+    "dataPath": [ "D:\\FE\\data\\fepk", "D:\\FE\\data\\fepk1", "D:\\FE\\data\\fepk2" ]
+  },
+  "label": {
+    "indexFile": "D:\\FE\\data\\fepk_label\\world-label12.fepk",
+    "dataPath": [ "D:\\FE\\data\\fepk_label" ]
+  },
+  "dem": {
+    "indexFile": "D:\\FE\\data\\fepk3\\worldDem0-8.fepk",
+    "dataPath": [ "D:\\FE\\data\\fepk3" ]
+  },
+  "httpIP": "127.0.0.1",
+  "httpPort": 11111,
+  "contentType": "image/jpeg"
+}

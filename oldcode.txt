@@ -1,0 +1,218 @@
+
+//    public Buffer getPackTimeImageV1(Int3 key) {
+//      String empty = "";
+//      String path1 = "";
+//      String path2 = "";
+//      if (key.z < 9) {
+//        path1 = this.getDataConfig().indexFile+INDEX_EXT;
+//        path2 = this.getDataConfig().indexFile;
+//      }else {
+//        boolean flag = false;
+//
+//        for (int index = 0; index < this.getDataConfig().dataPath.length; index++) {
+//          String path3 = this.calcBlockId(this.getDataConfig().dataPath[index], key);
+//          if (Files.exists(Paths.get(path3))) {
+//            flag = true;
+//            path2 = path3;
+//            path1 = path2 + INDEX_EXT;
+//            break;
+//          }
+//        }
+//        if (!flag) {
+//          return null;
+//        }
+//      }
+//        FileSystem fileSystem = vertx.fileSystem();
+//        Promise<AsyncFile>  filePromise = new PromiseImpl<>();
+//        fileSystem.open(path1,new OpenOptions(),fileAsyncResult -> {
+//          if (fileAsyncResult.succeeded()){
+//            Buffer buffer = Buffer.buffer(512);
+//            AsyncFile asyncFile = fileAsyncResult.result();
+//             asyncFile.read(buffer, 0, 0, buffer.length(),bufferAsyncResult -> {
+//               if (bufferAsyncResult.succeeded()){
+//                 Buffer readBuffer = bufferAsyncResult.result();
+//                 if (readBuffer.length() == buffer.length()){
+//                     FileHeader fileHeader = new FileHeader();
+//                     fileHeader.fillFromBuffer(readBuffer);
+//                     fileSystem.open(path2,new OpenOptions(),path2AsyncResult -> {
+//                       if (path2AsyncResult.succeeded()){
+//                           AsyncFile  path2File = path2AsyncResult.result();
+//                         for (int i = 0;  fileHeader.getLevOff()[i].getLevel() != 255L ; ++i) {
+//                              int level = (int)fileHeader.getLevOff()[i].getLevel();
+//                              if (key.getZ()== level){
+//                                LevInf levInf = new LevInf();
+//                                Buffer  numArray2 = Buffer.buffer(64);
+//                                int finalI = i;
+//                                asyncFile.read(numArray2,(int)(fileHeader.getLevOff()[i].getOffset()-256L),0,64, buffer2AsyncResult -> {
+//                                    if (buffer2AsyncResult.succeeded()){
+//                                        Buffer  readBuffer2 = buffer2AsyncResult.result();
+//                                        levInf.fillFromBuffer(readBuffer2);
+//                                        Int2 start = levInf.getStart();
+//                                        Int2 int2_1 = new Int2(levInf.getEnd().getX()-levInf.getStart().getX()+1,levInf.getEnd().getY()-levInf.getStart().getY()+1);
+//                                        Int2 int2_2 = new Int2(key.getX()-start.getX(),key.getY()-start.getY());
+//                                        if (int2_2.getX()<0 || int2_2.getY() <0 || int2_2.getY() >= int2_1.getY() || int2_2.getX()>=int2_1.getX()){
+//                                          asyncFile.close();
+//                                          path2File.close();
+//                                          // return
+//                                        }
+//                                        long offset1 = fileHeader.getLevOff()[finalI].getOffset() + (((long) int2_2.getY() * int2_1.getX() + int2_2.getX()) * 10);
+//                                        Buffer buffer1 = Buffer.buffer(10);
+//                                        Buffer buffer2 = Buffer.buffer(16);
+//
+//                                    }else {
+//                                      // read num2 buffer fail
+//                                    }
+//                                });
+//                              }
+//                         }
+//
+//                       }else {
+//                         // open path2 fail
+//                       }
+//                     });
+//
+//                 } else {
+//                   //  读取出错
+//                   asyncFile.close();
+//                 }
+//
+//               }else {
+//                  // read buffer fail
+//               }
+//             });
+//          }else {
+//           // open file fail
+//          }
+//        });
+//
+//
+//    }
+
+
+//    public void getPackTileImageV1(Int3 key, Handler<AsyncResult<byte[]>> resultHandler) {
+//      String empty = "";
+//      String path1 = "";
+//      String path2 = "";
+//      if (key.z < 9) {
+//        path1 = this.dataConfig.indexFile + ".idx";
+//        path2 = this.dataConfig.indexFile;
+//      } else {
+//        boolean flag = false;
+//        for (int index = 0; index < this.dataConfig.dataPath.length; ++index) {
+//          String path3 = this.calcBlockId(this.dataConfig.dataPath[index], key);
+//          if (Files.exists(Paths.get(path3))) {
+//            flag = true;
+//            path2 = path3;
+//            path1 = path2 + ".idx";
+//            break;
+//          }
+//        }
+//        if (!flag) {
+//          resultHandler.handle(Future.failedFuture("File not found"));
+//          return;
+//        }
+//      }
+//
+//      webClient.getAbs("file://" + path1)
+//        .as(BodyCodec.buffer())
+//        .send(ar1 -> {
+//          if (ar1.succeeded()) {
+//            Buffer buffer1 = ar1.result().body();
+//            if (buffer1.length() != 512) {
+//              resultHandler.handle(Future.failedFuture("Invalid file size"));
+//              return;
+//            }
+//            FileHeader fileHeader = new FileHeader();
+//            fileHeader.fillFromBuffer(buffer1.getBytes());
+//
+//            for (byte index = 0; fileHeader.levOff[(int) index].level != (byte) 255; ++index) {
+//              int level = (int) fileHeader.levOff[(int) index].level;
+//              if (key.z == level) {
+//                LevInf levInf = new LevInf();
+//                byte[] numArray2 = new byte[64];
+//                buffer1.getBuffer(0, 63).getBytes(numArray2);
+//                levInf.fillFromBuffer(numArray2);
+//                int2 start = levInf._start;
+//                int2 int2_1 = new int2(levInf._end.x - levInf._start.x + 1, levInf._end.y - levInf._start.y + 1);
+//                int2 int2_2 = new int2(key.x - start.x, key.y - start.y);
+//                if (int2_2.x < 0 || int2_2.y < 0 || int2_2.y >= int2_1.y || int2_2.x >= int2_1.x) {
+//                  resultHandler.handle(Future.failedFuture("Invalid key"));
+//                  return;
+//                }
+//                long offset1 = fileHeader.levOff[(int) index].offset + (long) ((int2_2.y * int2_1.x + int2_2.x) * 10);
+//
+//                webClient.getAbs("file://" + path2)
+//                  .as(BodyCodec.buffer())
+//                  .send(ar2 -> {
+//                    if (ar2.succeeded()) {
+//                      Buffer buffer2 = ar2.result().body();
+//                      ByteBuffer bb = ByteBuffer.wrap(buffer2.getBytes());
+//                      bb.position((int) offset1);
+//
+//                      byte[] buffer3 = new byte[bb.getInt()];
+//                      bb.get(buffer3);
+//
+//                      resultHandler.handle(Future.succeededFuture(buffer3));
+//                    } else {
+//                      resultHandler.handle(Future.failedFuture(ar2.cause()));
+//                    }
+//                  });
+//                return;
+//              }
+//            }
+//
+//            resultHandler.handle(Future.failedFuture("Level not found"));
+//          } else {
+//            resultHandler.handle(Future.failedFuture(ar1.cause()));
+//          }
+//        });
+//    }
+
+
+
+2023-11-20 02:58:51
+vertx 应用 可以编译为native应用么，该怎么做
+
+
+2023-11-20 02:59:14
+是的，Vert.x应用程序可以通过GraalVM的Native Image功能编译为本机可执行文件。Native Image是GraalVM的一项功能，它将Java应用程序编译成本机机器码，从而实现更快的启动时间和更低的内存消耗。
+
+要将Vert.x应用程序编译为本机应用程序，您可以按照以下步骤进行操作：
+
+安装GraalVM：首先，您需要安装GraalVM。您可以从GraalVM官方网站（https://www.graalvm.org/）下载并安装适合您操作系统的GraalVM版本。
+
+确保设置Java环境变量：安装GraalVM后，确保将GraalVM的bin目录添加到您的PATH环境变量中。
+
+构建并运行Vert.x应用程序：使用Maven或Gradle构建和运行您的Vert.x应用程序。确保您的应用程序可以在标准的JVM环境中正常运行。
+
+准备Native Image配置：创建一个名为native-image.properties的文件，并根据您的应用程序配置Native Image构建选项。此文件的位置应该是在与您的应用程序的根目录下。
+
+例如，以下是一个示例的native-image.properties文件，指定了Vert.x的反应模式和其他选项：
+
+properties
+-H:EnableURLProtocols=http,https
+-H:ReflectionConfigurationFiles=META-INF/native-image/reflect-config.json
+-H:ResourceConfigurationFiles=META-INF/native-image/resource-config.json
+-H:NativeImageOutOfProcessServer=y
+-H:+ReportExceptionStackTraces
+-H:+AllowIncompleteClasspath
+-Dio.netty.noUnsafe=true
+-Dfile.encoding=UTF-8
+-Duser.country=US
+-Duser.language=en
+-Duser.variant=
+构建Native Image：使用GraalVM提供的native-image命令来构建本机可执行文件。在命令行中，导航到您的项目根目录，并运行以下命令：
+
+shell
+native-image -cp <path/to/your/vertx-app.jar> -H:Name=<output-file-name>
+其中，<path/to/your/vertx-app.jar> 是您的Vert.x应用程序的jar文件路径，<output-file-name> 是您要生成的本机可执行文件的名称。
+
+例如，以下是一个示例命令：
+
+shell
+native-image -cp target/your-vertx-app.jar -H:Name=your-vertx-app
+运行该命令后，GraalVM将开始构建并生成本机可执行文件。
+
+请注意，使用GraalVM的Native Image功能需要一些配置和调整。不同的应用程序可能会有不同的要求和挑战。您可能需要根据您的应用程序的特殊要求进行优化和调整Native Image的构建选项。
+
+阅读GraalVM文档和Native Image文档可以帮助您更好地了解和使用GraalVM的本机图像功能。
