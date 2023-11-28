@@ -1,17 +1,16 @@
-package com.yhl.fepkhttp;
+package com.yhl.http;
 
 import io.vertx.core.DeploymentOptions;
-import io.vertx.core.Launcher;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import io.vertx.core.spi.resolver.ResolverProvider;
 
-public class FepkLauncher extends Launcher {
-  private static final Logger logger = LoggerFactory.getLogger(FepkLauncher.class);
+public class Launcher extends io.vertx.core.Launcher {
+  private static final Logger logger = LoggerFactory.getLogger(Launcher.class);
   public static void main(String[] args) {
-    new FepkLauncher().dispatch(args);
+    new Launcher().dispatch(args);
   }
   @Override
   public void beforeDeployingVerticle(DeploymentOptions deploymentOptions) {

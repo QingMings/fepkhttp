@@ -1,4 +1,4 @@
-package com.yhl.fepkhttp.fepkreader.types;
+package com.yhl.http.reader.types;
 
 public class Int4 {
     private int x;

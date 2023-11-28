@@ -1,8 +1,8 @@
-package com.yhl.fepkhttp.handles;
+package com.yhl.http.handles;
 
 import cn.hutool.core.util.ObjUtil;
-import com.yhl.fepkhttp.fepkreader.FEPKReader;
-import com.yhl.fepkhttp.fepkreader.types.Int3;
+import com.yhl.http.reader.Reader;
+import com.yhl.http.reader.types.Int3;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
@@ -10,17 +10,17 @@ import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.RoutingContext;
 
 
-public class FepkReadHandler implements Handler<RoutingContext> {
+public class ReadHandler implements Handler<RoutingContext> {
 
   public static final String READ_IMAGE = "readImage";
   public static final String READ_DEM = "readDem";
   public static final String READ_LABEL = "readLabel";
 
-  public FepkReadHandler(Vertx vertx) {
-    this.fepkReader = new FEPKReader(vertx.getOrCreateContext().config());
+  public ReadHandler(Vertx vertx) {
+    this.reader = new Reader(vertx.getOrCreateContext().config());
   }
 
-  private final FEPKReader fepkReader;
+  private final Reader reader;
 
   @Override
   public void handle(RoutingContext routingContext) {
@@ -35,13 +35,13 @@ public class FepkReadHandler implements Handler<RoutingContext> {
       HttpServerResponse response = routingContext.response();
       try {
         if (READ_IMAGE.equals(apiType)) {
-          byte[] packTileImageV1 = fepkReader.getPackTileImageV1(new Int3(Integer.parseInt(col), Integer.parseInt(row), Integer.parseInt(lev)));
+          byte[] packTileImageV1 = reader.getPackTileImageV1(new Int3(Integer.parseInt(col), Integer.parseInt(row), Integer.parseInt(lev)));
           bufferHandle(response, packTileImageV1,"image/jpeg");
         } else if (READ_LABEL.equals(apiType)) {
-          byte[] packTileLabelV1 = fepkReader.getPackTileLabelV1(new Int3(Integer.parseInt(col), Integer.parseInt(row), Integer.parseInt(lev)));
+          byte[] packTileLabelV1 = reader.getPackTileLabelV1(new Int3(Integer.parseInt(col), Integer.parseInt(row), Integer.parseInt(lev)));
           bufferHandle(response, packTileLabelV1,"image/jpeg");
         } else if (READ_DEM.equals(apiType)) {
-          byte[] packTileDemV1 = fepkReader.getPackTileDemV1(new Int3(Integer.parseInt(col), Integer.parseInt(row), Integer.parseInt(lev)));
+          byte[] packTileDemV1 = reader.getPackTileDemV1(new Int3(Integer.parseInt(col), Integer.parseInt(row), Integer.parseInt(lev)));
           bufferHandle(response, packTileDemV1,"application/octet-stream");
         }
       } catch (Exception e) {

@@ -1,28 +1,24 @@
-package com.yhl.fepkhttp.fepkreader;
+package com.yhl.http.reader;
 
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
-import com.yhl.fepkhttp.fepkreader.types.FileHeader;
-import com.yhl.fepkhttp.fepkreader.types.Int2;
-import com.yhl.fepkhttp.fepkreader.types.Int3;
-import com.yhl.fepkhttp.fepkreader.types.LevInf;
-import com.yhl.fepkhttp.model.DataConfig;
-import io.netty.buffer.ByteBuf;
+import com.yhl.http.reader.types.FileHeader;
+import com.yhl.http.reader.types.Int2;
+import com.yhl.http.reader.types.Int3;
+import com.yhl.http.reader.types.LevInf;
+import com.yhl.http.model.DataConfig;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.lang.reflect.Array;
-import java.nio.ByteBuffer;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 /**
- * fepk 文件阅读器
+ *  文件阅读器
  */
-public class FEPKReader {
+public class Reader {
   public static final String INDEX_EXT = ".idx";
   public static final String BINARY_EXE = ".fepk";
   public static final String TYPE_IMAGE = "image";
@@ -30,7 +26,7 @@ public class FEPKReader {
   public static final String TYPE_DEM = "dem";
   private DataConfig dataConfig;
 
-  public FEPKReader(JsonObject dataConfig) {
+  public Reader(JsonObject dataConfig) {
     setDataConfig(dataConfig);
   }
 

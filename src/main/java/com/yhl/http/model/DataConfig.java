@@ -1,4 +1,4 @@
-package com.yhl.fepkhttp.model;
+package com.yhl.http.model;
 
 /**
  * 配置文件 pojo

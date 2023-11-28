@@ -25,8 +25,10 @@
 
 <!--    <main.verticle>com.yhl.fepkhttp.MainVerticle</main.verticle>-->
 <!--    <launcher.class>io.vertx.core.Launcher</launcher.class>-->
-    <main.verticle>com.yhl.fepkhttp.MainVerticle</main.verticle>
-    <launcher.class>com.yhl.fepkhttp.FepkLauncher</launcher.class>
+    <main.verticle>com.yhl.http.MainVerticle</main.verticle>
+    <launcher.class>com.yhl.http.Launcher</launcher.class>
+    <map.main.verticle>qm.cm.dat.MainVerticle</map.main.verticle>
+    <map.launcher.class>qm.cm.dat.FepkLauncher</map.launcher.class>
   </properties>
 
   <dependencyManagement>
@@ -134,9 +136,19 @@
                   <!-- see the yGuard task documentation for information about the <yguard> element-->
                   <inoutpair in="${project.jar.unobf}" out="${project.jar}" />
                   <rename logfile="${project.build.directory}/${project.build.finalName}_renamelog.xml">
+                    <property name="naming-scheme" value="mix"/>
                     <keep>
+                      <!-- 表示一下类的公开方法不进行 rename-->
+                      <class classes="none" methods="public" fields="none">
+                        <patternset>
+                          <include name="com.yhl.http.model.DataConfig"/>
+                          <include name="com.yhl.http.model.DataConfig$DataType"/>
+                        </patternset>
+                      </class>
+                      <class name="${main.verticle}"/>
                       <class name="${launcher.class}" />
                       <method name="void main(java.lang.String[])" class="${launcher.class}"/>
+
                     </keep>
                   </rename>
                 </yguard>
@@ -183,7 +195,7 @@
           <mainClass>io.vertx.core.Launcher</mainClass>
           <arguments>
             <argument>run</argument>
-            <argument>${main.verticle}</argument>
+            <argument>${map.main.verticle}</argument>
           </arguments>
         </configuration>
       </plugin>

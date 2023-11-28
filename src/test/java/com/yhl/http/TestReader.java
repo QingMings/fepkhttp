@@ -1,8 +1,8 @@
-package com.yhl.fepkhttp;
+package com.yhl.http;
 
 import cn.hutool.core.util.ObjUtil;
-import com.yhl.fepkhttp.fepkreader.FEPKReader;
-import com.yhl.fepkhttp.fepkreader.types.Int3;
+import com.yhl.http.reader.Reader;
+import com.yhl.http.reader.types.Int3;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 
@@ -11,13 +11,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
-public class TestFepkReader {
+public class TestReader {
 
   public static void main(String[] args) throws FileNotFoundException {
     Vertx vertx = Vertx.vertx();
     JsonObject jsonObject = new JsonObject("{\"indexFile\": \"D:\\\\FE\\\\data\\\\fepk\\\\world.fepk\", \"dataPath\": [ \"D:\\\\FE\\\\data\\\\fepk\", \"D:\\\\FE\\\\data\\\\fepk1\", \"D:\\\\FE\\\\data\\\\fepk2\" ], \"httpIP\": \"127.0.0.1\", \"httpPort\": 11111, \"contentType\": \"image/jpeg\"}");
-    FEPKReader fepkReader = new FEPKReader(jsonObject);
-    byte[] imageData = fepkReader.getPackTileImageV1(new Int3(0,1,1));
+    Reader reader = new Reader(jsonObject);
+    byte[] imageData = reader.getPackTileImageV1(new Int3(0,1,1));
 
     FileOutputStream fileOutputStream = new FileOutputStream(new File("E:/yhl_work/fepkhttp/target/classes/a.jpeg"));
     try {
