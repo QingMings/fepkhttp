@@ -1,10 +1,10 @@
-#  fepkHttp 服务
+#  dsv 服务
 ### 简单说明
 #### 1.服务启动方式
-`java -jar  fepkHttp-1.0.0-all.jar -conf  ./conf/config.json`
+`java -jar  dsv-1.0.0-all.jar -conf  ./conf/config.json`
 
 多核提高性能
-`java -jar  fepkHttp-1.0.0-all.jar  -instances 10 -conf  ./conf/config.json`
+`java -jar  dsv-1.0.0-all.jar  -instances 10 -conf  ./conf/config.json`
 
 ### 2.服务说明
 `端口和数据配置查看 conf/config.json`

@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.yhl</groupId>
-  <artifactId>fepkhttp</artifactId>
+  <artifactId>dsv</artifactId>
   <version>1.0.0</version>
 
   <properties>
@@ -23,12 +23,9 @@
     <junit-jupiter.version>5.9.1</junit-jupiter.version>
     <hutool.version>5.8.23</hutool.version>
 
-<!--    <main.verticle>com.yhl.fepkhttp.MainVerticle</main.verticle>-->
-<!--    <launcher.class>io.vertx.core.Launcher</launcher.class>-->
     <main.verticle>com.yhl.http.MainVerticle</main.verticle>
     <launcher.class>com.yhl.http.Launcher</launcher.class>
-    <map.main.verticle>qm.cm.dat.MainVerticle</map.main.verticle>
-    <map.launcher.class>qm.cm.dat.FepkLauncher</map.launcher.class>
+
   </properties>
 
   <dependencyManagement>
