@@ -42,7 +42,7 @@ public class Reader {
   public String calcBlockId(String path, Int3 key) {
     int num1 = key.getX() >> key.getZ() - 8;
     int num2 = key.getY() >> key.getZ() - 8;
-    return Paths.get(path).resolve(StrUtil.format("{}-{}-{}" + BINARY_EXE, 8, num1, num2)).toString();
+    return Paths.get(path).resolve(StrUtil.format("{}-{}-{}" + ObjUtil.defaultIfNull(getDataConfig().getBinaryFormat(),BINARY_EXE), 8, num1, num2)).toString();
   }
 
 

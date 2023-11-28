@@ -11,6 +11,8 @@ public class DataConfig {
   private String httpPort;
   private String httpIP;
   private String contentType;
+  private String binaryFormat;
+
 
   public DataType getImage() {
     return image;
@@ -58,6 +60,14 @@ public class DataConfig {
 
   public void setContentType(String contentType) {
     this.contentType = contentType;
+  }
+
+  public String getBinaryFormat() {
+    return binaryFormat;
+  }
+
+  public void setBinaryFormat(String binaryFormat) {
+    this.binaryFormat = binaryFormat;
   }
 
   public class DataType {
