@@ -16,5 +16,5 @@
   "httpIP": "127.0.0.1",
   "httpPort": 11111,
   "contentType": "image/jpeg",
-  "binaryFormat": ".dat"
+  "format": ".dat"
 }
