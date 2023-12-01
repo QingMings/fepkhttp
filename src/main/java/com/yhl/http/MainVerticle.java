@@ -1,6 +1,7 @@
 package com.yhl.http;
 
 
+import com.yhl.http.exceptions.LicenseException;
 import com.yhl.http.handles.AppCodeHandler;
 import com.yhl.http.handles.LicenseVerifyHandler;
 import com.yhl.http.handles.ReadHandler;

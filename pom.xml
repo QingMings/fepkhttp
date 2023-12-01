@@ -100,6 +100,11 @@
       <version>4.0.0</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>de.schlichtherle.truelicense</groupId>
+      <artifactId>truelicense-core</artifactId>
+      <version>1.33</version>
+    </dependency>
   </dependencies>
 
   <build>

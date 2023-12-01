@@ -57,7 +57,6 @@ public class ServerInfoUtils {
             logger.error("获取服务器硬件信息异常", e);
             throw new LicenseException(String.format("获取服务器硬件信息异常, %s", e.getMessage()));
         }
-        logger.info(Json.encode(result));
         return result;
     }
 

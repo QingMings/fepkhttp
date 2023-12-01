@@ -16,5 +16,13 @@
   "httpIP": "127.0.0.1",
   "httpPort": 11111,
   "contentType": "image/jpeg",
-  "binaryFormat": ".dat"
+  "binaryFormat": ".dat",
+  "license": {
+    "verify": {
+      "storePwd":"123456abc",
+      "publicPwd": "12345678910abc",
+      "licensePath": "D:\\code\\fepkhttp\\conf\\license.lic",
+      "publicKeysStorePath": "D:\\code\\fepkhttp\\conf\\publicCerts.keystore"
+    }
+  }
 }

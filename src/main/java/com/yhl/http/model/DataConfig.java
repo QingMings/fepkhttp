@@ -13,6 +13,8 @@ public class DataConfig {
   private String contentType;
   private String binaryFormat;
 
+  private LicenseData  license;
+
 
   public DataType getImage() {
     return image;
@@ -70,6 +72,14 @@ public class DataConfig {
     this.binaryFormat = binaryFormat;
   }
 
+  public LicenseData getLicense() {
+    return license;
+  }
+
+  public void setLicense(LicenseData license) {
+    this.license = license;
+  }
+
   public class DataType {
     private String indexFile;
     private String[] dataPath;
@@ -88,6 +98,18 @@ public class DataConfig {
 
     public void setDataPath(String[] dataPath) {
       this.dataPath = dataPath;
+    }
+  }
+
+  public class LicenseData {
+    private LicenseVerifyProperties  verify;
+
+    public LicenseVerifyProperties getVerify() {
+      return verify;
+    }
+
+    public void setVerify(LicenseVerifyProperties verify) {
+      this.verify = verify;
     }
   }
 }
