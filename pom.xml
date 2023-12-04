@@ -7,6 +7,12 @@
   <groupId>com.yhl</groupId>
   <artifactId>dsv</artifactId>
   <version>1.0.0</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>license-core</module>
+    <module>dsv-all</module>
+    <module>license-gen</module>
+  </modules>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,197 +29,63 @@
     <junit-jupiter.version>5.9.1</junit-jupiter.version>
     <hutool.version>5.8.23</hutool.version>
 
-    <main.verticle>com.yhl.http.MainVerticle</main.verticle>
-    <launcher.class>com.yhl.http.Launcher</launcher.class>
+
+    <JAVA_HOME>C:/Program Files/Java/jdk1.8.0_341</JAVA_HOME>
 
   </properties>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>io.vertx</groupId>
-        <artifactId>vertx-stack-depchain</artifactId>
-        <version>${vertx.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+<dependencies>
 
-  <dependencies>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-config</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-web</artifactId>
-    </dependency>
+  <dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-api</artifactId>
+    <version>${junit-jupiter.version}</version>
+    <scope>test</scope>
+  </dependency>
+  <dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-engine</artifactId>
+    <version>${junit-jupiter.version}</version>
+    <scope>test</scope>
+  </dependency>
 
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-junit5</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>${junit-jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${junit-jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>${logback.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-core</artifactId>
-      <version>${hutool.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-crypto</artifactId>
-      <version>${hutool.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-json</artifactId>
-      <version>${hutool.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.13.4.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.yworks</groupId>
-      <artifactId>yguard</artifactId>
-      <version>4.0.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>de.schlichtherle.truelicense</groupId>
-      <artifactId>truelicense-core</artifactId>
-      <version>1.33</version>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven-compiler-plugin.version}</version>
-<!--        jdk8 时候注释掉-->
-<!--        <configuration>-->
-<!--          <release>11</release>-->
-<!--        </configuration>-->
-      </plugin>
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.8</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <id>obfuscate</id>
-            <configuration>
-              <tasks>
-                <property
-                  name="project.jar"
-                  value="${project.build.directory}/${project.artifactId}-${project.version}.jar"/>
-                <property
-                  name="project.jar.unobf"
-                  value="${project.build.directory}/${project.artifactId}-${project.version}-unobf.jar"/>
-
-                <move
-                  file="${project.jar}"
-                  tofile="${project.jar.unobf}"
-                  verbose="true"/>
-                <property
-                  name="runtime_classpath"
-                  refid="maven.runtime.classpath"/>
-                <taskdef name="yguard" classname="com.yworks.yguard.YGuardTask" classpath="${runtime_classpath}"/>
-                <yguard>
-                  <!-- see the yGuard task documentation for information about the <yguard> element-->
-                  <inoutpair in="${project.jar.unobf}" out="${project.jar}" />
-                  <rename logfile="${project.build.directory}/${project.build.finalName}_renamelog.xml">
-                    <property name="naming-scheme" value="mix"/>
-                    <keep>
-                      <!-- 表示一下类的公开方法不进行 rename-->
-                      <class classes="none" methods="public" fields="none">
-                        <patternset>
-                          <include name="com.yhl.http.model.DataConfig"/>
-                          <include name="com.yhl.http.model.DataConfig$DataType"/>
-                        </patternset>
-                      </class>
-                      <class name="${main.verticle}"/>
-                      <class name="${launcher.class}" />
-                      <method name="void main(java.lang.String[])" class="${launcher.class}"/>
-
-                    </keep>
-                  </rename>
-                </yguard>
-              </tasks>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>${maven-shade-plugin.version}</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <transformers>
-                <transformer
-                  implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <manifestEntries>
-                    <Main-Class>${launcher.class}</Main-Class>
-                    <Main-Verticle>${main.verticle}</Main-Verticle>
-                  </manifestEntries>
-                </transformer>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-              </transformers>
-              <outputFile>${project.build.directory}/${project.artifactId}-${project.version}-all.jar
-              </outputFile>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${maven-surefire-plugin.version}</version>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>${exec-maven-plugin.version}</version>
-        <configuration>
-          <mainClass>io.vertx.core.Launcher</mainClass>
-          <arguments>
-            <argument>run</argument>
-            <argument>${map.main.verticle}</argument>
-          </arguments>
-        </configuration>
-      </plugin>
-
-    </plugins>
-  </build>
+  <dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-classic</artifactId>
+    <version>${logback.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>cn.hutool</groupId>
+    <artifactId>hutool-core</artifactId>
+    <version>${hutool.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>cn.hutool</groupId>
+    <artifactId>hutool-crypto</artifactId>
+    <version>${hutool.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>cn.hutool</groupId>
+    <artifactId>hutool-json</artifactId>
+    <version>${hutool.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.13.4.1</version>
+  </dependency>
+  <dependency>
+    <groupId>com.yworks</groupId>
+    <artifactId>yguard</artifactId>
+    <version>4.0.0</version>
+    <scope>compile</scope>
+  </dependency>
+  <dependency>
+    <groupId>de.schlichtherle.truelicense</groupId>
+    <artifactId>truelicense-core</artifactId>
+    <version>1.33</version>
+  </dependency>
+</dependencies>
 
 
 </project>

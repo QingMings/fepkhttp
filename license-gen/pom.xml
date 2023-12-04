@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.yhl</groupId>
+    <artifactId>dsv</artifactId>
+    <version>1.0.0</version>
+  </parent>
+
+  <artifactId>license-gen</artifactId>
+
+  <properties>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <main.verticle>com.yhl.license.MainVerticle</main.verticle>
+    <launcher.class>com.yhl.license.Launcher</launcher.class>
+  </properties>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.vertx</groupId>
+        <artifactId>vertx-stack-depchain</artifactId>
+        <version>${vertx.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-config</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.yhl</groupId>
+      <artifactId>license-core</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+  </dependencies>
+  <build>
+  <plugins>
+    <plugin>
+      <artifactId>maven-compiler-plugin</artifactId>
+      <version>${maven-compiler-plugin.version}</version>
+      <!--        jdk8 时候注释掉-->
+      <!--        <configuration>-->
+      <!--          <release>11</release>-->
+      <!--        </configuration>-->
+
+      <configuration>
+        <source>1.8</source>
+        <target>1.8</target>
+        <encoding>utf-8</encoding>
+        <!-- 加入下面编译参数的配置及可以找到rt.jar -->
+        <compilerArguments>
+          <verbose />
+          <bootclasspath>${JAVA_HOME}/jre/lib/rt.jar${path.separator}${JAVA_HOME}/jre/lib/jce.jar</bootclasspath>
+        </compilerArguments>
+      </configuration>
+
+    </plugin>
+    <plugin>
+      <artifactId>maven-antrun-plugin</artifactId>
+      <version>1.8</version>
+      <executions>
+        <execution>
+          <phase>package</phase>
+          <goals>
+            <goal>run</goal>
+          </goals>
+          <id>obfuscate</id>
+          <configuration>
+            <tasks>
+              <property
+                name="project.jar"
+                value="${project.build.directory}/${project.artifactId}-${project.version}.jar"/>
+              <property
+                name="project.jar.unobf"
+                value="${project.build.directory}/${project.artifactId}-${project.version}-unobf.jar"/>
+
+              <move
+                file="${project.jar}"
+                tofile="${project.jar.unobf}"
+                verbose="true"/>
+              <property
+                name="runtime_classpath"
+                refid="maven.runtime.classpath"/>
+              <taskdef name="yguard" classname="com.yworks.yguard.YGuardTask" classpath="${runtime_classpath}"/>
+              <yguard>
+                <!-- see the yGuard task documentation for information about the <yguard> element-->
+                <inoutpair in="${project.jar.unobf}" out="${project.jar}" />
+                <rename logfile="${project.build.directory}/${project.build.finalName}_renamelog.xml">
+                  <property name="naming-scheme" value="mix"/>
+                  <keep>
+                    <!-- 表示一下类的公开方法不进行 rename-->
+                    <class classes="none" methods="public" fields="none">
+                      <patternset>
+                        <include name="com.yhl.http.model.DataConfig"/>
+                        <include name="com.yhl.http.model.DataConfig$DataType"/>
+                        <include name="com.yhl.http.model.*"/>
+                      </patternset>
+                    </class>
+                    <class name="${main.verticle}"/>
+                    <class name="${launcher.class}" />
+                    <method name="void main(java.lang.String[])" class="${launcher.class}"/>
+
+                  </keep>
+                </rename>
+              </yguard>
+            </tasks>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+    <plugin>
+      <artifactId>maven-shade-plugin</artifactId>
+      <version>${maven-shade-plugin.version}</version>
+      <executions>
+        <execution>
+          <phase>package</phase>
+          <goals>
+            <goal>shade</goal>
+          </goals>
+          <configuration>
+            <transformers>
+              <transformer
+                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                <manifestEntries>
+                  <Main-Class>${launcher.class}</Main-Class>
+                  <Main-Verticle>${main.verticle}</Main-Verticle>
+                </manifestEntries>
+              </transformer>
+              <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+            </transformers>
+            <outputFile>${project.build.directory}/${project.artifactId}-${project.version}-execute.jar
+            </outputFile>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+    <plugin>
+      <artifactId>maven-surefire-plugin</artifactId>
+      <version>${maven-surefire-plugin.version}</version>
+    </plugin>
+    <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>exec-maven-plugin</artifactId>
+      <version>${exec-maven-plugin.version}</version>
+      <configuration>
+        <mainClass>io.vertx.core.Launcher</mainClass>
+        <arguments>
+          <argument>run</argument>
+          <argument>${main.verticle}</argument>
+        </arguments>
+      </configuration>
+    </plugin>
+
+  </plugins>
+</build>
+</project>
