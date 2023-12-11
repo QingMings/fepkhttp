@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>License 授权管理</title>
+  <link rel="stylesheet" href="layui/css/layui.css">
+  <style>
+    .layui-input-block {
+      margin-left: 164px;
+    }
+
+    .layui-form-label {
+      width: 134px;
+    }
+  </style>
+</head>
+<body>
+<div style="margin: 0 auto; max-width: 1140px;">
+  <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>生成授权</legend>
+  </fieldset>
+
+  <form class="layui-form" action="form.html">
+
+    <div class="layui-form-item">
+      <label class="layui-form-label">keyPwd</label>
+      <div class="layui-input-block">
+        <input type="text" name="keyPwd" lay-verify="required" autocomplete="off" placeholder="请输入keyPwd"
+               class="layui-input" value="123456a123456">
+      </div>
+    </div>
+
+    <div class="layui-form-item">
+      <label class="layui-form-label">storePwd</label>
+      <div class="layui-input-block">
+        <input type="text" name="storePwd" lay-verify="required" autocomplete="off" placeholder="请输入storePwd"
+               class="layui-input" value="123456abc">
+      </div>
+    </div>
+
+    <div class="layui-form-item">
+      <label class="layui-form-label">privateKeysStorePath</label>
+      <div class="layui-input-block">
+        <input type="text" name="privateKeysStorePath" lay-verify="required" autocomplete="off"
+               placeholder="请输入privateKeysStorePath" class="layui-input"
+               value="D:\code\fepkhttp\license-gen\src\main\resources\privateKeys.keystore">
+      </div>
+    </div>
+
+    <div class="layui-form-item">
+      <label class="layui-form-label">consumerAmount</label>
+      <div class="layui-input-block">
+        <input type="text" name="consumerAmount" lay-verify="required" autocomplete="off"
+               placeholder="请输入consumerAmount" class="layui-input"
+               value="1">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-inline">
+        <label class="layui-form-label">过期时间</label>
+        <div class="layui-input-inline">
+          <input type="text" name="expiryTime" id="expiryTime" lay-verify="required|datetime" placeholder="yyyy-MM-dd HH:mm:ss"
+                 autocomplete="off" class="layui-input">
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+      <label class="layui-form-label">appCode</label>
+      <div class="layui-input-block">
+        <textarea id="appCode" name="appCode" lay-verify="required" placeholder="请输入appCode" class="layui-textarea"></textarea>
+      </div>
+    </div>
+
+    <div class="layui-form-item">
+      <div class="layui-input-block">
+        <button type="submit" class="layui-btn" lay-submit="" lay-filter="licenseGen">立即生成</button>
+
+      </div>
+    </div>
+  </form>
+
+</div>
+
+
+<!-- 引入 layui.js 的 <script> 标签最好放置在 html 末尾 -->
+<script src="jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous"></script>
+<script src="layui/layui.js"></script>
+<script>
+  layui.use(['form', 'layedit', 'laydate'], function () {
+
+    var form = layui.form
+      , layer = layui.layer
+      , layedit = layui.layedit
+      , laydate = layui.laydate;
+
+    //日期
+    laydate.render({
+      elem: '#expiryTime',
+      type: 'datetime'
+    });
+
+    form.on('submit(licenseGen)',function(data){
+      $.ajax({
+        type: "POST",
+        url: "/api/license/generate",
+        contentType: 'application/json',
+        data: JSON.stringify(data.field),
+        xhrFields: {
+          responseType: 'blob'
+        },
+        success: function (response,status,xhr) {
+// check for a filename
+          var filename = "";
+          var disposition = xhr.getResponseHeader('Content-Disposition');
+          if (disposition && disposition.indexOf('attachment') !== -1) {
+            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+            var matches = filenameRegex.exec(disposition);
+            if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+          }
+
+          var type = xhr.getResponseHeader('Content-Type');
+          var blob = new Blob([response], { type: type });
+
+          if (typeof window.navigator.msSaveBlob !== 'undefined') {
+            // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+            window.navigator.msSaveBlob(blob, filename);
+          } else {
+            var URL = window.URL || window.webkitURL;
+            var downloadUrl = URL.createObjectURL(blob);
+
+            if (filename) {
+              // use HTML5 a[download] attribute to specify filename
+              var a = document.createElement("a");
+              // safari doesn't support this yet
+              if (typeof a.download === 'undefined') {
+                window.location = downloadUrl;
+              } else {
+                a.href = downloadUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+              }
+            } else {
+              window.location = downloadUrl;
+            }
+
+            setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+            layer.msg('生成授权文件成功！', {icon: 1, offset: '100px'});
+          }
+
+        },
+        error: function (err) {
+          layer.msg(data.message, {icon: 2, offset: '100px'});
+        }
+      });
+
+      return false;
+    })
+  })
+</script>
+</body>
+</html>

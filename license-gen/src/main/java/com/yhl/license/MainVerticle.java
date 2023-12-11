@@ -14,6 +14,7 @@ import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.StaticHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,12 +29,11 @@ public class MainVerticle extends AbstractVerticle {
   public void start(Promise<Void> startPromise) throws Exception {
     HttpServer server = vertx.createHttpServer();
     Router router = Router.router(vertx);
-//    router.route("/api/*").handler(new LicenseVerifyHandler(vertx));
     router.get("/api/license/privateKeys").handler(new PrivateKeyHandler(vertx));
     router.get("/api/license/publicCerts").handler(new PublicCertsHandler(vertx));
     router.post("/api/license/generate").handler(BodyHandler.create());
     router.post("/api/license/generate").handler(new LicenseGenerateHandler(vertx));
-//    router.get("/app/getCode").handler(new AppCodeHandler());
+    router.route("/*").handler(StaticHandler.create());
     server.requestHandler(router);
     server.listen(config().getInteger("httpPort"),
       config().getString("httpIP"), http -> {

@@ -1,0 +1,201 @@
+{
+	"info": {
+		"_postman_id": "4eb1b263-4f5f-4976-bd54-254362de2a23",
+		"name": "feakLicense",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "87512",
+		"_collection_link": "https://gjproject.postman.co/workspace/GJ~dbd00cf5-2154-4813-916f-16b3b90a1119/collection/87512-4eb1b263-4f5f-4976-bd54-254362de2a23?action=share&source=collection_link&creator=87512"
+	},
+	"item": [
+		{
+			"name": "生成私钥 Copy",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:11112/api/license/privateKeys?validity=10&storePwd=123456abc&keyPwd=123456a123456",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "11112",
+					"path": [
+						"api",
+						"license",
+						"privateKeys"
+					],
+					"query": [
+						{
+							"key": "validity",
+							"value": "10",
+							"description": "证书有效期(单位：年), 默认：1"
+						},
+						{
+							"key": "storePwd",
+							"value": "123456abc",
+							"description": "秘钥库密码"
+						},
+						{
+							"key": "keyPwd",
+							"value": "123456a123456",
+							"description": "私钥密码"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "生成公钥 Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:11112/api/license/publicCerts?validity=10&storePwd=123456abc&publicPwd=12345678910abc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "11112",
+					"path": [
+						"api",
+						"license",
+						"publicCerts"
+					],
+					"query": [
+						{
+							"key": "validity",
+							"value": "10",
+							"description": "证书有效期(单位：年), 默认：1"
+						},
+						{
+							"key": "storePwd",
+							"value": "123456abc",
+							"description": "秘钥库密码"
+						},
+						{
+							"key": "publicPwd",
+							"value": "12345678910abc",
+							"description": "公钥密码"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "获取申请码 Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:11111/app/getCode",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "11111",
+					"path": [
+						"app",
+						"getCode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "生成许可证文件 Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\r\n      \"keyPwd\": \"123456a123456\",\r\n      \"storePwd\": \"123456abc\",\r\n      \"privateKeysStorePath\": \"D:\\\\code\\\\fepkhttp\\\\license-gen\\\\src\\\\main\\\\resources\\\\privateKeys.keystore\",\r\n      \"consumerAmount\": 1,\r\n      \"expiryTime\": \"2024-07-23 14:05:00\",\r\n      \"appCode\": \"5b2d533e14522c70d9580384a2b7e1303658be06423039ac29aade36f3acf6138193130ae5a327d15ae8557ebe3b5598b9b407286e6fd333775b2fa22217295122f3e456db549980e5c9c6f6c6370d924a71aca8821fa13fc3d451c1c9f657fc63e278edfc30ba2d964ee5211be28ee483cb67230fcbfe7f004e0a9c6724fd26e8f73b5026463e87769d90a01fce424cab8297a43270a98b5df4878110e61992\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:11112/api/license/generate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "11112",
+					"path": [
+						"api",
+						"license",
+						"generate"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "生成许可证文件 Copy",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\r\n      \"keyPwd\": \"123456a123456\",\r\n      \"storePwd\": \"123456abc\",\r\n      \"privateKeysStorePath\": \"D:\\\\code\\\\fepkhttp\\\\license-gen\\\\src\\\\main\\\\resources\\\\privateKeys.keystore\",\r\n      \"consumerAmount\": 1,\r\n      \"expiryTime\": \"2024-07-23 14:05:00\",\r\n      \"appCode\": \"5b2d533e14522c70d9580384a2b7e1300a3059f9c32409cb9d714dcc0546f68934f5328e90ad96a2bd46bcd7966b59dce3b2489a3137f0198cdbb3f8511ca00a24407a180359502c2febd2f4138df9801af5677816adcba7a2f043aecfc7707cc750955b6fc7ff72de930ae62565c51b70b32d504583830f722e668271c418a798ca11dc26192f96f139ba5ec47f5c1bbaab9a864e8136686f81b64bc1d9abb2db0dcff2be5836ca745ec614751f79d57877e29687ed0aa11d81770210a0f91ca55831267504e58fcd593696500fca89600f9e089fa0c1306c0fd7ad42f87c99e83443c91a8040713942038b33713f95cda3135dcf676ca4f7961ce1df97536c11c5a1c2134243590274a80c6ec5f579\"\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:11112/api/license/generate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "11112",
+							"path": [
+								"api",
+								"license",
+								"generate"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "raw",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/octet-stream"
+						},
+						{
+							"key": "Content-Length",
+							"value": "968"
+						},
+						{
+							"key": "content-disposition",
+							"value": "attachment;filename*=UTF-8''privateKeys.keystore"
+						}
+					],
+					"cookie": [],
+					"body": ">'�v��=c�-7\u0014Q��Nv)�P��=݊~�Pp<���E\u0002\u0006p�ĝ(<[�v��ٟ0�z������\u0004\u0019e��d�zv��\u001b~�Nz���\u0019<i\u0003��i�'�.t\u0007��56\n�\u0003�Gυ��&��5\u0007��\u00117���O�\f\u0005i:�|\u0014R�f���\f�\u0000l:��\u0011c���h\u000b3�\u0002�f;\u001a�v�aoH��<@��g�)+��\u001eDj�b�̨��I^\u0011�\u0006�L\u001a�]�jm�\u0015P�\u0004�\r3�<� ����MuT��W�N�-��r�Z\u000f���\u0006�E�-̙�.�\u0002�����).��ì���52\n�75\u0019�l���@��ǉ����\u0010%\u000f#���>a[9���\u0015��������?(\u0011�3h�\u001b��{쏪�\n�j\u000f�\b\u0011,��\u0000u��\b�\u001f$gM�S���\u001c�q��\u001fQ\u0002�ȍ1��,q��Ьl5������]}\u0003F>t\u001a=Ʀ\u0000b\\��M����3\u000b���Wr��@_R�.�5)\u001e�F���<����G�l��\u0005Q�::C\u0002�[��8\u0011\u001c�x\u0013B��]�hI1�ZZ�������\u0019�8$r��2���9�:�^�Ż�GU\u001a���\u001e��f+S!�H��\u0012\u0002A |\u001c ̋�BA.\u001a�cϦ�\t1��cZ�&D7�5k٦�\b\u00171����ƍ*�\u0007�\u0004�Y�\u0015\n+��|�)x\b�D\u0010h��\\\n�\\;*\u0019'�ִPj�\u0014C���\u001b�%�|T�mziSD�Y��2\u001b/Ǿ\nʖ!�⦥}�$�=��\u0002{�Ţ�]\r>�3\u001d\u0010�[O�\u0001EN\u0018�Փ�)�\u00183_��\u0005\u001b�DN�+*�\u0018RtE�\u0001z�t]��17j{Ma�\u000f���{�ފ,/^\u0019��db`��E�D\u000f�wԺ�z�V󏒡����\ru\u000b��p\u0002�X^\\X\u0016�(�Fsv?�q�l��53F/s��7��g�Tq���fIq؜'o�ڌ�Bug\u0018\u0017���[j��ҏ���B�\u001b#N�鹖�x�OS�V�\u0002��\fȏl��$�\u0002���0Q��O�������U��\n\u0004�B4�\u0002�i\u0000TKS�oF1[=kʬ.���\\L(��y�\u0018\u0016��TG1p\t�R��L#�>���3D���^�\"���\"t������0�7�)�I��\u001d�D��V�N�������\t����\u0001T\u00053&ߤB�\t�'��쮄\\�"
+				}
+			]
+		}
+	]
+}

@@ -37,7 +37,7 @@ public class PrivateKeyHandler implements Handler<RoutingContext> {
       Buffer buffer = Buffer.buffer(privateKeys);
       response.setStatusCode(200).putHeader("Content-Type", "application/octet-stream")
         .putHeader("Content-Length", String.valueOf(buffer.length()))
-        .putHeader("content-disposition", "attachment;filename*=UTF-8''" + URLEncoder.encode(KeyStoreUtils.PRIVATE_KEYS, "UTF-8"))
+        .putHeader("content-disposition", "attachment;filename=" + URLEncoder.encode(KeyStoreUtils.PRIVATE_KEYS, "UTF-8"))
         .send(buffer);
     } catch (Exception e) {
       response.putHeader("Content-Type", "application/json");

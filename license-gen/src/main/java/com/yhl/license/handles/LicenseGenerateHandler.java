@@ -65,7 +65,7 @@ public class LicenseGenerateHandler implements Handler<RoutingContext> {
       Buffer buffer = Buffer.buffer(FileUtil.readBytes(licensePath));
       response.setStatusCode(200).putHeader("Content-Type", "application/octet-stream")
         .putHeader("Content-Length", String.valueOf(buffer.length()))
-        .putHeader("content-disposition", "attachment;filename*=UTF-8''" + URLEncoder.encode(FileUtils.LICENSE_FILE, "UTF-8"))
+        .putHeader("content-disposition", "attachment;filename=" + URLEncoder.encode(FileUtils.LICENSE_FILE, "UTF-8"))
         .send(buffer);
     } catch (Exception e) {
       response.putHeader("Content-Type", "application/json");
