@@ -14,6 +14,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.StaticHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +32,7 @@ public class MainVerticle extends AbstractVerticle {
     router.route("/api/*").handler(new LicenseVerifyHandler(vertx));
     router.get("/api/:apiType").handler(new ReadHandler(vertx));
     router.get("/app/getCode").handler(new AppCodeHandler());
+    router.route("/*").handler(StaticHandler.create());
     server.requestHandler(router);
     server.listen(config().getInteger("httpPort"),
       config().getString("httpIP"), http -> {
